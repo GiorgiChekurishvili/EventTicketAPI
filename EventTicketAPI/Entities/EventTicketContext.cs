@@ -48,7 +48,7 @@ namespace EventTicketAPI.Entities
             modelBuilder.Entity<TicketType>().HasQueryFilter(x=>!x.IsDeleted);
 
             modelBuilder.Entity<User>().HasKey(x => x.Id);
-            modelBuilder.Entity<User>().Property(x => x.DateCreated).HasDefaultValueSql("SYSDATETIME()");
+            modelBuilder.Entity<User>().Property(x => x.DateRegistered).HasDefaultValueSql("SYSDATETIME()");
             modelBuilder.Entity<User>().HasOne(x => x.Role).WithMany(x => x.User).HasForeignKey(x => x.RoleId);
             modelBuilder.Entity<User>().Property(x => x.Name).IsRequired().HasColumnType("nvarchar(30)");
             modelBuilder.Entity<User>().Property(x => x.LastName).IsRequired().HasColumnType("nvarchar(50)");
