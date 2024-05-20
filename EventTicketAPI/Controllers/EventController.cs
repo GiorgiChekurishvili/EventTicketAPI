@@ -76,7 +76,7 @@ namespace EventTicketAPI.Controllers
         {
             if (id == 0)
             {
-                return BadRequest();
+                return BadRequest("Error: event hasnt been deleted");
             }
             await _eventService.RemoveEvent(id);
             return Ok();
