@@ -36,7 +36,7 @@ namespace EventTicketAPI.Controllers
             var boughtticket = await _ticketservice.BuyTicketService(buyTicket);
             if (Convert.ToInt32(boughtticket) == 0)
             {
-                return BadRequest("All the tickets in this section has been sold");
+                return BadRequest("All the tickets in this section has already been sold");
             }
             
             return Ok("total price is: " + boughtticket + " lari");
