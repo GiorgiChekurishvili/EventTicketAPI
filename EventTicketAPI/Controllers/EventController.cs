@@ -48,7 +48,7 @@ namespace EventTicketAPI.Controllers
             {
                 return BadRequest("capacity can't be zero");
             }
-            return Ok("Event has been added");
+            return Ok("Event has been already added");
         }
 
         [Authorize]
