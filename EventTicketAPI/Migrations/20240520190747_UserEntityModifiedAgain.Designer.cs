@@ -4,6 +4,7 @@ using EventTicketAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventTicketAPI.Migrations
 {
     [DbContext(typeof(EventTicketContext))]
-    partial class EventTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20240520190747_UserEntityModifiedAgain")]
+    partial class UserEntityModifiedAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.Event", b =>
@@ -80,7 +83,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.Favorite", b =>
@@ -108,7 +111,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Favorites", (string)null);
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.Role", b =>
@@ -125,7 +128,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.TicketSale", b =>
@@ -167,7 +170,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketSales", (string)null);
+                    b.ToTable("TicketSales");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.TicketType", b =>
@@ -212,7 +215,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("TicketTypes", (string)null);
+                    b.ToTable("TicketTypes");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.User", b =>
@@ -232,7 +235,7 @@ namespace EventTicketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime?>("ExpiresPasswordChangeDate")
+                    b.Property<DateTime?>("ExpiresPasswordChange")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
@@ -267,7 +270,7 @@ namespace EventTicketAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("EventTicketAPI.Entities.Event", b =>

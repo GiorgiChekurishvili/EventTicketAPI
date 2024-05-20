@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventTicketAPI.Entities
 {
-    public class TicketType : ISoftDeletable
+    public class TicketType : IsDeletable
     {
        
         public int Id { get; set; }

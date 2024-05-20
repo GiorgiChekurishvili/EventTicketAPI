@@ -66,7 +66,7 @@ namespace EventTicketAPI.Entities
             foreach (var entry in ChangeTracker.Entries())
             {
                 
-                if (entry.Entity is ISoftDeletable softDeletable && entry.State == EntityState.Deleted)
+                if (entry.Entity is IsDeletable softDeletable && entry.State == EntityState.Deleted)
                 {
                     
                     entry.State = EntityState.Modified;

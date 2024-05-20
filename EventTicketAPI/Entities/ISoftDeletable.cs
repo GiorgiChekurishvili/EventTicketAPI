@@ -1,6 +1,6 @@
 ﻿namespace EventTicketAPI.Entities
 {
-    public interface ISoftDeletable
+    public interface IsDeletable
     {
         bool IsDeleted { get; set; }
     }
