@@ -9,6 +9,7 @@ using System.Text;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace EventTicketAPI.Services
 {
@@ -24,6 +25,7 @@ namespace EventTicketAPI.Services
             _config = config;
 
         }
+
         public async Task<string> Login(string Email, string Password)
         {
             var user = await _repository.LoginRepository(Email, Password);
@@ -90,9 +92,38 @@ namespace EventTicketAPI.Services
                 ));
         }
 
-        public async Task<bool> VerifyUser(string email)
+        public async Task<bool> UserExists(string email)
         {
             return await _repository.UserExistsRepository(email);
+        }
+
+        public async Task<UserReturnDto> VerifyUser(string token)
+        {
+            var user = await _repository.UserVerificationRepository(token);
+            if (user == null)
+            {
+                return null;
+            }
+            return _mapper.Map<UserReturnDto>(user);
+        }
+        public async Task<UserReturnDto> ChangePassword(ResetPasswordDto resetPassword)
+        {
+            var change = await _repository.ChangePasswordRepository(resetPassword.Token, resetPassword.Password);
+            if (change == null)
+            {
+                return null;
+            }
+            return _mapper.Map<UserReturnDto>(change);
+        }
+
+        public async Task<UserReturnDto> ForgetPassword(string email)
+        {
+            var forget = await _repository.ForgetPasswordRepository(email);
+            if (forget == null)
+            {
+                return null;
+            }
+            return _mapper.Map<UserReturnDto>(forget);
         }
     }
 }
