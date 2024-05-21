@@ -24,7 +24,7 @@ namespace EventTicketAPI.Controllers
                 return BadRequest();
             }
             userRegister.Email = userRegister.Email.ToLower();
-            if (await _authservice.VerifyUser(userRegister.Email))
+            if (await _authservice.UserExists(userRegister.Email))
             {
                 return BadRequest("User already exists");
             }
@@ -54,6 +54,35 @@ namespace EventTicketAPI.Controllers
             return Ok(token);
         }
 
-
+        [HttpPost("verify/{token}")]
+        public async Task<IActionResult> VerifyUser(string token)
+        {
+            var user = await _authservice.VerifyUser(token);
+            if (user == null)
+            {
+                return BadRequest("Invalid Token");
+            }
+            return Ok("User Verified");
+        }
+        [HttpPost("forgetpassword/{email}")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            var forget = _authservice.ForgetPassword(email);
+            if (forget == null)
+            {
+                return BadRequest("The email address could not be found");
+            }
+            return Ok("a key has been sent to your email");
+        }
+        [HttpPost("changepassword")]
+        public async Task<IActionResult> ChangePassword(ResetPasswordDto resetPassword)
+        {
+            var change = _authservice.ChangePassword(resetPassword);
+            if (change == null)
+            {
+                return BadRequest("Invalid Token");
+            }
+            return Ok("Password Changed Successfully");
+        }
     }
 }
