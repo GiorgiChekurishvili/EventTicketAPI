@@ -73,7 +73,7 @@ namespace EventTicketAPI.Repositories
             }
         }
 
-        public async Task<User> UserVerification(string token)
+        public async Task<User> UserVerificationRepository(string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x=>x.Verify == token);
             if (user == null)
@@ -86,7 +86,7 @@ namespace EventTicketAPI.Repositories
             return user;
         }
 
-        public async Task<User> ChangePassword(string token, string newPassword)
+        public async Task<User> ChangePasswordRepository(string token, string newPassword)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.PasswordChangeVerification == token);
             if (user == null || user.ExpiresPasswordChangeDate < DateTime.Now)
@@ -103,7 +103,7 @@ namespace EventTicketAPI.Repositories
             return user;
         }
 
-        public async Task<User> ForgetPassword(string email)
+        public async Task<User> ForgetPasswordRepository(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             if (user == null)
