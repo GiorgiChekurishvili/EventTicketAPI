@@ -33,6 +33,10 @@ namespace EventTicketAPI.Services
             {
                 return null;
             }
+            if (user.VerifiedAt == null)
+            {
+                return null;
+            }
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -62,34 +66,6 @@ namespace EventTicketAPI.Services
             var repo = await _repository.RegisterRepository(usermap, user.Password);
 
             return user;
-        }
-
-        public Task SendEmail(string email)
-        {
-            string mail = "test.organization007@gmail.com";
-            string password = "Test1234!";
-
-            var client = new SmtpClient("smtp.gmail.com", 587)
-            {
-                EnableSsl = true,
-                Credentials = new NetworkCredential(mail,password)
-            };
-            Random random = new Random();
-
-            string numbers = null;
-            for (int i = 0; i < 5; i++)
-            {
-                numbers = random.Next(0, 10).ToString();
-            }
-            
-            return client.SendMailAsync(new MailMessage
-                (
-                from: mail,
-                to: email,
-                subject: "Verification",
-                numbers
-
-                ));
         }
 
         public async Task<bool> UserExists(string email)

@@ -1,16 +1,24 @@
 ﻿using EventTicketAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using MailKit.Net.Smtp;
+using System.Net;
 using System.Security.Cryptography;
+using MimeKit;
+using Org.BouncyCastle.Crypto.Macs;
+using static System.Net.Mime.MediaTypeNames;
+using MimeKit.Text;
+using MailKit.Security;
 
 namespace EventTicketAPI.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
         private readonly EventTicketContext _context;
-        public AuthRepository(EventTicketContext context)
+        private readonly IConfiguration _config;
+        public AuthRepository(EventTicketContext context, IConfiguration config)
         {
-
+            _config = config;
             _context = context;
 
         }
@@ -35,12 +43,16 @@ namespace EventTicketAPI.Repositories
             byte[] passwordhash, passwordsalt;
             CreatePasswordHash(password, out passwordhash, out passwordsalt);
             var token = CreateRandomToken();
+            SendEmail(user.Email, token);
             user.Verify = token;
             user.PasswordHash = passwordhash;
             user.PasswordSalt = passwordsalt;
-            user.RoleId = 1;
+            user.RoleId = 0;
+            user.VerifiedAt = null;
+            user.ExpiresPasswordChangeDate = null;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+            
             return user;
         }
 
@@ -82,6 +94,7 @@ namespace EventTicketAPI.Repositories
             }
             user.VerifiedAt = DateTime.Now;
             user.Verify = null;
+            user.RoleId = 1;
             await _context.SaveChangesAsync();
             return user;
         }
@@ -110,15 +123,32 @@ namespace EventTicketAPI.Repositories
             {
                 return null;
             }
-            var number = CreateRandomToken();
-            user.PasswordChangeVerification = number;
+            var token = CreateRandomToken();
+            SendEmail(email, token);
+            user.PasswordChangeVerification = token;
             user.ExpiresPasswordChangeDate = DateTime.Now.AddDays(1);
             await _context.SaveChangesAsync();
+            
             return user;
         }
         public string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
+        }
+        public void SendEmail(string email, string token)
+        {
+            var mail = new MimeMessage();
+            mail.From.Add(MailboxAddress.Parse(_config.GetSection("EmailSender").Value));
+            mail.To.Add(MailboxAddress.Parse(email));
+            mail.Subject = "Verification";
+            mail.Body = new TextPart(TextFormat.Plain) { Text = token };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_config.GetSection("EmailSender").Value, _config.GetSection("EmailPassword").Value);
+            smtp.Send(mail);
+            smtp.Disconnect(true);
+
         }
     }
     

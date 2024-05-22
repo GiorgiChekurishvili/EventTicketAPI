@@ -18,6 +18,7 @@ namespace EventTicketAPI
             CreateMap<Category, CategoryReturnDto>().ReverseMap();
             CreateMap<TicketType, TicketTypeReturnDto>().ReverseMap();
             CreateMap<TicketSale, MyTicketReturnDto>().ReverseMap();
+            CreateMap<UserReturnDto, User>().ReverseMap();
             
         }
     }

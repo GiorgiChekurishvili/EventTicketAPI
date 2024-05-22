@@ -1,5 +1,6 @@
 ﻿using EventTicketAPI.Dtos;
 using EventTicketAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System.Security.Claims;
@@ -11,7 +12,7 @@ namespace EventTicketAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthService _authservice;
-        public AuthenticationController(IAuthService authService, IConfiguration configuration)
+        public AuthenticationController(IAuthService authService)
         {
             _authservice = authService;
         }
@@ -35,9 +36,10 @@ namespace EventTicketAPI.Controllers
                 LastName = userRegister.LastName,
                 Password = userRegister.Password,
                 ConfirmPassword = userRegister.ConfirmPassword,
+                
             };
             await _authservice.Register(user);
-            return Ok();
+            return Ok($"a key has been sent to your email: {user.Email}");
         }
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLoginDto userLogin)
@@ -54,6 +56,7 @@ namespace EventTicketAPI.Controllers
             return Ok(token);
         }
 
+        [Authorize]
         [HttpPost("verify/{token}")]
         public async Task<IActionResult> VerifyUser(string token)
         {
@@ -62,22 +65,22 @@ namespace EventTicketAPI.Controllers
             {
                 return BadRequest("Invalid Token");
             }
-            return Ok("User Verified");
+            return Ok($"User: {user.Name} {user.LastName} Successfully Verified");
         }
         [HttpPost("forgetpassword/{email}")]
         public async Task<IActionResult> ForgetPassword(string email)
         {
-            var forget = _authservice.ForgetPassword(email);
+            var forget = await _authservice.ForgetPassword(email);
             if (forget == null)
             {
                 return BadRequest("The email address could not be found");
             }
-            return Ok("a key has been sent to your email");
+            return Ok($"a key has been sent to your email: {forget.Email}");
         }
         [HttpPost("changepassword")]
         public async Task<IActionResult> ChangePassword(ResetPasswordDto resetPassword)
         {
-            var change = _authservice.ChangePassword(resetPassword);
+            var change = await _authservice.ChangePassword(resetPassword);
             if (change == null)
             {
                 return BadRequest("Invalid Token");
