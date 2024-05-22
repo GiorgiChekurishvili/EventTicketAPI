@@ -24,15 +24,17 @@ namespace EventTicketAPI.Services
             var map = _mapper.Map<Event>(addEvent);
             var _event =_eventRepository.InsertEvent(map);
 
-             await ResetEventsCache();
+            await ResetEventsCache();
+            await ResetEventsByCategoryCache(addEvent.CategoryId);
             return _mapper.Map<AddEventDto>(_event);
 
         }
 
         public async Task RemoveEvent(int id)
         {
-            _eventRepository.DeleteEvent(id);
-             await ResetEventsCache();
+            var categoryid = _eventRepository.DeleteEvent(id);
+            await ResetEventsByCategoryCache(categoryid);
+            await ResetEventsCache();
         }
         public async Task UpdateEvent(int id, AddEventDto updateEvent)
         {
@@ -98,10 +100,31 @@ namespace EventTicketAPI.Services
             return map;
             
         }
+        public async Task<IEnumerable<EventReturnDto>> ShowEventsByCategory(int categoryid)
+        {
+            var cachekey = $"ShowEventsByCategory-{categoryid}";
+            var cachedata = await _cache.GetStringAsync(cachekey);
+            if (!string.IsNullOrEmpty(cachedata))
+            {
+                return JsonConvert.DeserializeObject<IEnumerable<EventReturnDto>>(cachedata);
+            }
+            var events = _eventRepository.GetEventByCategory(categoryid);
+            var map = _mapper.Map<IEnumerable<EventReturnDto>>(events);
+            var cacheoptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5)).SetSlidingExpiration(TimeSpan.FromHours(1));
+            await _cache.SetStringAsync(cachekey, JsonConvert.SerializeObject(map),cacheoptions);
+            return map;
+        }
         public async Task UnfavoriteEvent(int userId, int EventId)
         {
             _eventRepository.RemoveFavorite(userId, EventId);
             await ResetFavoritesCache(userId);
+        }
+
+        
+        public async Task ResetEventsByCategoryCache(int categoryid)
+        {
+            var cachekey = $"ShowEventsByCategory-{categoryid}";
+            await _cache.RemoveAsync(cachekey);
         }
         public async Task ResetEventsCache()
         {

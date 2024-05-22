@@ -27,7 +27,16 @@ namespace EventTicketAPI.Controllers
             }
             return Ok(categories);
         }
-
+        [HttpGet("eventsbycategory/{categoryid}")]
+        public async Task<ActionResult<IEnumerable<EventReturnDto>>> EventsByCategory(int categoryid)
+        {
+            var categories = await _eventService.ShowEventsByCategory(categoryid);
+            if (!categories.Any())
+            {
+                return NotFound();
+            }
+            return Ok(categories);
+        }
         [Authorize]
         [RoleFilter("Admin")]
         [HttpPost("publishevent")]

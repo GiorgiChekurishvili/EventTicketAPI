@@ -64,7 +64,7 @@ namespace EventTicketAPI.Repositories
                 }
             }
         }
-        public void DeleteEvent(int id)
+        public int DeleteEvent(int id)
         {
             var _event = _context.Events.FirstOrDefault(e => e.Id == id);
             if (_event != null)
@@ -83,7 +83,9 @@ namespace EventTicketAPI.Repositories
                
                 _context.Events.Remove(_event);
                 _context.SaveChanges();
+                return _event.CategoryId;
             }
+            return 0;
             
         }
         public IEnumerable<Event> GetAllEvents()
@@ -134,6 +136,16 @@ namespace EventTicketAPI.Repositories
 
             return eventdata;
 
+        }
+
+        public IEnumerable<Event> GetEventByCategory(int categoryId)
+        {
+            var events = _context.Events.Where(x => x.CategoryId == categoryId).ToList();
+            if (events == null)
+            {
+                return null;
+            }
+            return events;
         }
     }
 }

@@ -6,12 +6,13 @@ namespace EventTicketAPI.Repositories
     {
         Event InsertEvent(Event _event);
         void UpdateEventRepo(Event _event);
-        void DeleteEvent(int id);
+        int DeleteEvent(int id);
         IEnumerable<Event> GetAllEvents();
         IEnumerable<Category> GetAllCategories();
         Favorite AddFavoriteEvent(Favorite favorite, int userid);
         void RemoveFavorite(int userId, int EventId);
         IEnumerable<Event> GetMyFavorites(int userId);
+        IEnumerable<Event> GetEventByCategory(int categoryId);
         
     }
 }
