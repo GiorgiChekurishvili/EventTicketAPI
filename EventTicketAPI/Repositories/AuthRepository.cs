@@ -47,7 +47,7 @@ namespace EventTicketAPI.Repositories
             user.Verify = token;
             user.PasswordHash = passwordhash;
             user.PasswordSalt = passwordsalt;
-            user.RoleId = 0;
+            user.RoleId = 1;
             user.VerifiedAt = null;
             user.ExpiresPasswordChangeDate = null;
             await _context.Users.AddAsync(user);
@@ -131,10 +131,7 @@ namespace EventTicketAPI.Repositories
             
             return user;
         }
-        public string CreateRandomToken()
-        {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
-        }
+        
         public void SendEmail(string email, string token)
         {
             var mail = new MimeMessage();
@@ -149,6 +146,10 @@ namespace EventTicketAPI.Repositories
             smtp.Send(mail);
             smtp.Disconnect(true);
 
+        }
+        public string CreateRandomToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
         }
     }
     

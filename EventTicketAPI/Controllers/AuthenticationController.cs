@@ -27,7 +27,7 @@ namespace EventTicketAPI.Controllers
             userRegister.Email = userRegister.Email.ToLower();
             if (await _authservice.UserExists(userRegister.Email))
             {
-                return BadRequest("User already exists");
+                return Conflict("User already exists");
             }
             UserRegisterDto user = new()
             {
@@ -56,14 +56,14 @@ namespace EventTicketAPI.Controllers
             return Ok(token);
         }
 
-        [Authorize]
+       
         [HttpPost("verify/{token}")]
         public async Task<IActionResult> VerifyUser(string token)
         {
             var user = await _authservice.VerifyUser(token);
             if (user == null)
             {
-                return BadRequest("Invalid Token");
+                return Unauthorized("Invalid Token");
             }
             return Ok($"User: {user.Name} {user.LastName} Successfully Verified");
         }
@@ -83,7 +83,7 @@ namespace EventTicketAPI.Controllers
             var change = await _authservice.ChangePassword(resetPassword);
             if (change == null)
             {
-                return BadRequest("Invalid Token");
+                return Unauthorized("Invalid Token");
             }
             return Ok("Password Changed Successfully");
         }
