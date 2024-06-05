@@ -9,5 +9,6 @@
         public string TicketTypeName { get; set; }
         public int TicketQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public DateTime PurchaseDate { get; set; }
     }
 }
