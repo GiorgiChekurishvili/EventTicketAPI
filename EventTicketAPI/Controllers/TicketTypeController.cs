@@ -49,7 +49,7 @@ namespace EventTicketAPI.Controllers
             var tickettypes = await _ticketService.ShowTicketTypes(eventId);
             if (tickettypes == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(tickettypes);
         }

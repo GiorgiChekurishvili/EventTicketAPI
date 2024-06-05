@@ -42,6 +42,10 @@ namespace EventTicketAPI.Controllers
         {
             var userid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var result = await _eventService.ShowMyFavorites(userid);
+            if (result == null)
+            {
+                return NotFound();
+            }
             return Ok(result);
 
         }

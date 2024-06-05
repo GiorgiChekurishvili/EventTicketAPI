@@ -59,7 +59,7 @@ namespace EventTicketAPI.Controllers
             var result = await _ticketservice.ShowTickets(user);
             if (result == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(result);
         }
