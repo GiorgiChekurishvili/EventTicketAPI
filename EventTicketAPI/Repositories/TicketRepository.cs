@@ -19,7 +19,7 @@ namespace EventTicketAPI.Repositories
         public IEnumerable<TicketSale> GetTickets(int userid)
         {
             
-            var data = _context.TicketSales.Where(x=>x.UserId == userid).ToList();
+            var data = _context.TicketSales.Include(t => t.Event).Include(t => t.TicketType).ToList();
             return data;
             
         }

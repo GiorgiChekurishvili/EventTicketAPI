@@ -16,10 +16,13 @@ namespace EventTicketAPI
             CreateMap<TicketSale, BuyTicketDto>().ReverseMap();
             CreateMap<Event, EventReturnDto>().ReverseMap();
             CreateMap<Category, CategoryReturnDto>().ReverseMap();
-            CreateMap<TicketType, TicketTypeReturnDto>().ReverseMap();
+            //CreateMap<TicketType, TicketTypeReturnDto>().ReverseMap();
             CreateMap<TicketSale, MyTicketReturnDto>().ReverseMap();
             CreateMap<UserReturnDto, User>().ReverseMap();
-            
+            CreateMap<TicketSale, MyTicketReturnDto>()
+            .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.EventName))
+            .ForMember(dest => dest.TicketTypeName, opt => opt.MapFrom(src => src.TicketType.TicketTypeName)).ReverseMap();
+
         }
     }
 }
