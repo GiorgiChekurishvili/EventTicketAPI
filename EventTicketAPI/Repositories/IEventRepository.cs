@@ -13,6 +13,8 @@ namespace EventTicketAPI.Repositories
         void RemoveFavorite(int userId, int EventId);
         IEnumerable<Event> GetMyFavorites(int userId);
         IEnumerable<Event> GetEventByCategory(int categoryId);
-        
+        Event GetEventsById(int id);
+
+
     }
 }

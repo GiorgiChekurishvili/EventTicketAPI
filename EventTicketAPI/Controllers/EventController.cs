@@ -101,6 +101,16 @@ namespace EventTicketAPI.Controllers
             }
             return Ok(_event);
         }
+        [HttpGet("eventsbyid/{id}")]
+        public async Task<ActionResult<EventReturnDto>> EventsById(int id)
+        {
+            var _eventsbyid = await _eventService.ShowEventsById(id);
+            if (_eventsbyid == null)
+            {
+                return NotFound();
+            }
+            return Ok(_eventsbyid);
+        }
 
     }
 }

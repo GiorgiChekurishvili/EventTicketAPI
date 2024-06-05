@@ -3,6 +3,7 @@ using EventTicketAPI.Dtos;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace EventTicketAPI.Services
@@ -26,6 +27,7 @@ namespace EventTicketAPI.Services
 
             await ResetEventsCache();
             await ResetEventsByCategoryCache(addEvent.CategoryId);
+            await ResetEventsByIdCache(_event.Id);
             return _mapper.Map<AddEventDto>(_event);
 
         }
@@ -35,6 +37,7 @@ namespace EventTicketAPI.Services
             var categoryid = _eventRepository.DeleteEvent(id);
             await ResetEventsByCategoryCache(categoryid);
             await ResetEventsCache();
+            await ResetEventsByIdCache(id);
         }
         public async Task UpdateEvent(int id, AddEventDto updateEvent)
         {
@@ -42,6 +45,8 @@ namespace EventTicketAPI.Services
             map.Id = id;
             _eventRepository.UpdateEventRepo(map);
             await ResetEventsCache();
+            await ResetEventsByCategoryCache(updateEvent.CategoryId);
+            await ResetEventsByIdCache(id);
         }
         
         public async Task<IEnumerable<EventReturnDto>> ShowEvents()
@@ -57,6 +62,20 @@ namespace EventTicketAPI.Services
             var map = _mapper.Map<IEnumerable<EventReturnDto>>(events);
             var cacheoptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(30)).SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
             await _cache.SetStringAsync(cachekey,JsonConvert.SerializeObject(map), cacheoptions);
+            return map;
+        }
+        public async Task<EventReturnDto> ShowEventsById(int id)
+        {
+            var cachekey = $"ShowEventsById-{id}";
+            var cachedata = await _cache.GetStringAsync(cachekey);
+            if (!string.IsNullOrEmpty(cachedata))
+            {
+                return JsonConvert.DeserializeObject<EventReturnDto>(cachedata);
+            }
+            var events = _eventRepository.GetEventsById(id);
+            var map = _mapper.Map<EventReturnDto>(events);
+            var cacheoptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(3)).SetAbsoluteExpiration(TimeSpan.FromHours(1));
+            await _cache.SetStringAsync(cachekey, JsonConvert.SerializeObject(map), cacheoptions);
             return map;
         }
         public async Task<IEnumerable<CategoryReturnDto>> ShowCategories()
@@ -136,7 +155,12 @@ namespace EventTicketAPI.Services
             var cachekey = $"ShowMyFavorites-{userid}";
             await _cache.RemoveAsync(cachekey);
         }
+        public async Task ResetEventsByIdCache(int eventid)
+        {
+            var cachekey = $"ShowEventsById-{eventid}";
+            await _cache.RemoveAsync(cachekey);
+        }
 
-        
+
     }
 }

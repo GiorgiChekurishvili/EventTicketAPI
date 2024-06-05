@@ -14,5 +14,6 @@ namespace EventTicketAPI.Services
         Task UnfavoriteEvent(int userId, int EventId);
         Task<IEnumerable<EventReturnDto>> ShowMyFavorites(int userid);
         Task<IEnumerable<EventReturnDto>> ShowEventsByCategory(int  categoryid);
+        Task<EventReturnDto> ShowEventsById(int id);
     }
 }

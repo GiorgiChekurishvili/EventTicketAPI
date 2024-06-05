@@ -94,6 +94,11 @@ namespace EventTicketAPI.Repositories
             var events = _context.Events.ToList();
             return events;
         }
+        public Event GetEventsById(int id)
+        {
+            var events = _context.Events.Find(id);
+            return events;
+        }
         public IEnumerable<Category> GetAllCategories()
         {
             
