@@ -13,7 +13,7 @@ namespace EventTicketAPI.Entities
         public TicketType TicketType { get; set; }
         public required int TicketQuantity { get; set; }
         public decimal TotalPrice { get; set; }
-        public DateTime PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; } = DateTime.Now;
         public bool IsDeleted { get; set; } = false;
     }
 }

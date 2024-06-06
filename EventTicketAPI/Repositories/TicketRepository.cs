@@ -27,8 +27,8 @@ namespace EventTicketAPI.Repositories
         {
             if (ticketSale != null)
             {
-                var date = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.Id);
-                if (date.SalesEndDate > ticketSale.PurchaseDate || date.SalesStartDate < ticketSale.PurchaseDate)
+                var date = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
+                if (date.SalesEndDate > ticketSale.PurchaseDate && date.SalesStartDate < ticketSale.PurchaseDate)
                 {
 
 
@@ -80,6 +80,7 @@ namespace EventTicketAPI.Repositories
 
                     }
                 }
+                
             }
             return 0;
 
