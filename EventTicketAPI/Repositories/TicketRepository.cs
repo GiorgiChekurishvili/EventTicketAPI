@@ -27,52 +27,58 @@ namespace EventTicketAPI.Repositories
         {
             if (ticketSale != null)
             {
-                var _eventId =  _context.TicketTypes.Where(x => x.EventId == ticketSale.EventId).ToList();
-                if (_eventId != null)
+                var date = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.Id);
+                if (date.SalesEndDate > ticketSale.PurchaseDate || date.SalesStartDate < ticketSale.PurchaseDate)
                 {
-                    var totalticketprice = _eventId.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
-                    if (totalticketprice != null)
-                    {
-                        var _totalprice = ticketSale.TicketQuantity * totalticketprice.Price;
 
-                        TicketSale ticket = new TicketSale()
+
+                    var _eventId = _context.TicketTypes.Where(x => x.EventId == ticketSale.EventId).ToList();
+                    if (_eventId != null)
+                    {
+                        var totalticketprice = _eventId.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
+                        if (totalticketprice != null)
                         {
-                            UserId = ticketSale.UserId,
-                            EventId = ticketSale.EventId,
-                            TicketTypeId = ticketSale.TicketTypeId,
-                            TotalPrice = _totalprice,
-                            TicketQuantity = ticketSale.TicketQuantity
-                        };
-                        var tickettype = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
-                        if (tickettype != null)
-                        {
-                            if (tickettype.TicketsAvailable != 0)
+                            var _totalprice = ticketSale.TicketQuantity * totalticketprice.Price;
+
+                            TicketSale ticket = new TicketSale()
                             {
-                                var modified = tickettype.TicketsAvailable - ticketSale.TicketQuantity;
-                                tickettype.TicketsAvailable = modified;
-                                if (modified >= 0)
+                                UserId = ticketSale.UserId,
+                                EventId = ticketSale.EventId,
+                                TicketTypeId = ticketSale.TicketTypeId,
+                                TotalPrice = _totalprice,
+                                TicketQuantity = ticketSale.TicketQuantity
+                            };
+                            var tickettype = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
+                            if (tickettype != null)
+                            {
+                                if (tickettype.TicketsAvailable != 0)
                                 {
-                                    _context.TicketTypes.Update(tickettype);
-                                    _context.SaveChanges();
+                                    var modified = tickettype.TicketsAvailable - ticketSale.TicketQuantity;
+                                    tickettype.TicketsAvailable = modified;
+                                    if (modified >= 0)
+                                    {
+                                        _context.TicketTypes.Update(tickettype);
+                                        _context.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        return 0;
+                                    }
                                 }
                                 else
                                 {
                                     return 0;
                                 }
+                                _context.TicketSales.Add(ticket);
+                                _context.SaveChanges();
+
+
+                                return _totalprice;
+
                             }
-                            else
-                            {
-                                return 0;
-                            }
-                            _context.TicketSales.Add(ticket);
-                            _context.SaveChanges();
-
-
-                            return _totalprice;
-
                         }
-                    }
 
+                    }
                 }
             }
             return 0;
