@@ -24,10 +24,19 @@ namespace EventTicketAPI.Services
         {
             var map = _mapper.Map<Event>(addEvent);
             var _event =_eventRepository.InsertEvent(map);
-
+            
             await ResetEventsCache();
             await ResetEventsByCategoryCache(addEvent.CategoryId);
-            await ResetEventsByIdCache(_event.Id);
+            try
+            {
+
+
+                await ResetEventsByIdCache(_event.Id);
+            }
+            catch
+            {
+                return null;
+            }
             return _mapper.Map<AddEventDto>(_event);
 
         }
