@@ -44,19 +44,20 @@ namespace EventTicketAPI.Controllers
         {
 
             var currentdate = DateTime.Now;
-            if (addEvent.EventDate <= currentdate)
+            if (addEvent.EventDate < currentdate)
             {
-                return BadRequest("Datetime is incorrect");
+                return Conflict("Datetime is incorrect");
+            }
+            if (addEvent.Capacity < 0)
+            {
+                return Forbid("capacity must be greater than 0");
             }
             var _event = await _eventService.AddEventService(addEvent);
             if (_event == null)
             {
                 return BadRequest("Event's name already exists");
             }
-            if (addEvent.Capacity == 0)
-            {
-                return BadRequest("capacity can't be zero");
-            }
+            
             return Ok("Event has been already added");
         }
 
@@ -66,13 +67,13 @@ namespace EventTicketAPI.Controllers
         public async Task<IActionResult> UpdateEvent(int id, AddEventDto addEvent)
         {
             var currentdate = DateTime.Now;
-            if (addEvent.EventDate > currentdate)
+            if (addEvent.EventDate < currentdate)
             {
                 return BadRequest("Datetime is incorrect");
             }
-            if (addEvent.Capacity == 0)
+            if (addEvent.Capacity < 0)
             {
-                return BadRequest("capacity can't be zero");
+                return Forbid("capacity mut be greater than 0");
             }
             await _eventService.UpdateEvent(id, addEvent);
             return Ok();
@@ -83,10 +84,6 @@ namespace EventTicketAPI.Controllers
         [HttpDelete("deleteevent/{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
-            if (id == 0)
-            {
-                return BadRequest("Error: event hasnt been deleted");
-            }
             await _eventService.RemoveEvent(id);
             return Ok();
         }
