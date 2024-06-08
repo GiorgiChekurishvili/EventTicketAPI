@@ -24,7 +24,7 @@ namespace EventTicketAPI.Repositories
         }
         public async Task<User> LoginRepository(string email, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await _context.Users.Include(x=>x.Role).FirstOrDefaultAsync(x => x.Email == email);
 
             if (user == null)
             {
