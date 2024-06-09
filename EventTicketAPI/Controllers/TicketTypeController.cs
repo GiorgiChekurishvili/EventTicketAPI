@@ -40,8 +40,7 @@ namespace EventTicketAPI.Controllers
             
             return Ok();
         }
-        [Authorize]
-        [RoleFilter("Admin,Member")]
+
         [HttpGet("seetickettypes/{eventId}")]
         public async Task<ActionResult<IEnumerable<TicketTypeReturnDto>>> SeeTicketTypes(int eventId)
         {
