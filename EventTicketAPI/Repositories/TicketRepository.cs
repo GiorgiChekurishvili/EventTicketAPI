@@ -160,7 +160,7 @@ namespace EventTicketAPI.Repositories
         }
         public void UpdateTicketTypeRepo(TicketType ticketType)
         {
-            if (ticketType.TotalTickets <= 0 || ticketType.Price <= 0 || ticketType.SalesEndDate <  DateTime.Now || ticketType.SalesStartDate <= DateTime.Now)
+            if (ticketType.TotalTickets <= 0 || ticketType.Price <= 0 || ticketType.SalesEndDate <  DateTime.Now)
             {
                 
                 return;
