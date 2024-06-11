@@ -23,6 +23,7 @@ namespace EventTicketAPI
             .ForMember(dest => dest.TicketTypeName, opt => opt.MapFrom(src => src.TicketType.TicketTypeName))
             .ForMember(dest => dest.PurchaseDate, opt => opt.MapFrom(src => src.PurchaseDate)).ReverseMap();
             CreateMap<TicketType, TicketTypeReturnDto>().ReverseMap();
+            CreateMap<Image, ImageDto>().ReverseMap();
 
         }
     }
