@@ -152,5 +152,76 @@ namespace EventTicketAPI.Repositories
             }
             return events;
         }
+        public async Task<Image> InsertImage(IFormFile fileUpload, int eventId)
+        {
+            try
+            {
+                if (fileUpload.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await fileUpload.CopyToAsync(memoryStream);
+
+                        var image = new Image
+                        {
+                            EventId = eventId,
+                            Photo = memoryStream.ToArray(),
+                            ImageType = fileUpload.ContentType
+                        };
+
+                        var eventEntity = await _context.Events.Include(e => e.Image).FirstOrDefaultAsync(e => e.Id == eventId);
+                        if (eventEntity == null)
+                        {
+                            return null;
+                        }
+
+                        if (eventEntity.Image == null)
+                        {
+                            _context.Images.Add(image);
+                        }
+                        else
+                        {
+                            eventEntity.Image.Photo = image.Photo;
+                            eventEntity.Image.ImageType = image.ImageType;
+                            _context.Images.Update(eventEntity.Image);
+                        }
+
+                        await _context.SaveChangesAsync();
+                        return image;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async  Task<Image> GetImage(int eventId)
+        {
+            var eventEntity = await _context.Images.FirstOrDefaultAsync(e => e.EventId == eventId);
+
+            if (eventEntity == null || eventEntity.Photo == null)
+            {
+                return null;
+            }
+
+            return eventEntity;
+        }
+        public void DeleteImage(int eventId)
+        {
+            var image = _context.Images.FirstOrDefault(x => x.EventId == eventId);
+            if (image != null)
+            {
+                _context.Images.Remove(image);
+                _context.SaveChanges();
+            }
+            
+
+
+        }
     }
 }

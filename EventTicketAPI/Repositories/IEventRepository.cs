@@ -14,6 +14,9 @@ namespace EventTicketAPI.Repositories
         IEnumerable<Event> GetMyFavorites(int userId);
         IEnumerable<Event> GetEventByCategory(int categoryId);
         Event GetEventsById(int id);
+        Task<Image> InsertImage(IFormFile fileUpload, int eventId);
+        Task<Image> GetImage(int eventId);
+        void DeleteImage(int eventId);
 
 
     }
