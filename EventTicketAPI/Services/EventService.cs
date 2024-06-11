@@ -147,6 +147,21 @@ namespace EventTicketAPI.Services
             _eventRepository.RemoveFavorite(userId, EventId);
             await ResetFavoritesCache(userId);
         }
+        public async Task AddImage(IFormFile formFile, int eventId)
+        {
+            await _eventRepository.InsertImage(formFile, eventId);
+        }
+        public async Task<ImageDto> ShowImage(int eventId)
+        {
+            var image = await _eventRepository.GetImage(eventId);
+            var map = _mapper.Map<ImageDto>(image);
+            return map;
+
+        }
+        public void RemoveImage(int eventId)
+        {
+            _eventRepository.DeleteImage(eventId);
+        }
 
         
         public async Task ResetEventsByCategoryCache(int categoryid)

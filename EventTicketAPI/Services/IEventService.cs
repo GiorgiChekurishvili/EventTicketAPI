@@ -15,5 +15,8 @@ namespace EventTicketAPI.Services
         Task<IEnumerable<EventReturnDto>> ShowMyFavorites(int userid);
         Task<IEnumerable<EventReturnDto>> ShowEventsByCategory(int  categoryid);
         Task<EventReturnDto> ShowEventsById(int id);
+        Task AddImage(IFormFile formFile, int eventId);
+        Task<ImageDto> ShowImage(int eventId);
+        void RemoveImage(int eventId);
     }
 }
