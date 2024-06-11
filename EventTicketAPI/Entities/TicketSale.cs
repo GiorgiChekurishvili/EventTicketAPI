@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EventTicketAPI.Models;
 
 namespace EventTicketAPI.Entities
 {

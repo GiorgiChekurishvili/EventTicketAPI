@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventTicketAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventTicketAPI.Entities
 {
@@ -16,6 +17,7 @@ namespace EventTicketAPI.Entities
         public DbSet<TicketType> TicketTypes { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,6 +61,11 @@ namespace EventTicketAPI.Entities
             modelBuilder.Entity<Favorite>().Property(x=> x.FavoriteAdded).HasDefaultValueSql("SYSDATETIME()");
             modelBuilder.Entity<Favorite>().HasOne(x=>x.User).WithMany(x=>x.Favorite).HasForeignKey(x => x.UserId);
             modelBuilder.Entity<Favorite>().HasOne(x => x.Event).WithMany(x => x.Favorite).HasForeignKey(x => x.EventId);
+
+            modelBuilder.Entity<Image>().HasKey(x => x.Id);
+            modelBuilder.Entity<Image>().HasOne(x => x.Event).WithOne(x => x.Image).HasForeignKey<Image>(x => x.EventId);
+            
+
 
         }
         public override int SaveChanges()

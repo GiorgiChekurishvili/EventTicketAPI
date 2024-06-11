@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EventTicketAPI.Models;
 
 namespace EventTicketAPI.Entities
 {
@@ -15,9 +16,11 @@ namespace EventTicketAPI.Entities
         public required DateTime EventDate { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public Image Image { get; set; }
         public ICollection<TicketType> TicketType { get; set; }
         public ICollection<TicketSale> TicketSale { get; set;}
         public ICollection<Favorite> Favorite { get; set; }
+        
 
     }
 }
