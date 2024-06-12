@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
-using EventTicketAPI.Dtos;
+using EventTicketAPI.Dtos.Event;
+using EventTicketAPI.Dtos.Image;
+using EventTicketAPI.Dtos.TicketSale;
+using EventTicketAPI.Dtos.TicketType;
+using EventTicketAPI.Dtos.Transactions;
+using EventTicketAPI.Dtos.User;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Services;
 
@@ -24,6 +29,8 @@ namespace EventTicketAPI
             .ForMember(dest => dest.PurchaseDate, opt => opt.MapFrom(src => src.PurchaseDate)).ReverseMap();
             CreateMap<TicketType, TicketTypeReturnDto>().ReverseMap();
             CreateMap<Image, ImageDto>().ReverseMap();
+            CreateMap<Transactions, FillTransactionsDto>().ReverseMap();
+            CreateMap<Transactions, TransactionsReturnDto>();
 
         }
     }
