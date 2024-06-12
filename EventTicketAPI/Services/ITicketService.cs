@@ -1,4 +1,5 @@
-﻿using EventTicketAPI.Dtos;
+﻿using EventTicketAPI.Dtos.TicketSale;
+using EventTicketAPI.Dtos.TicketType;
 using EventTicketAPI.Entities;
 
 namespace EventTicketAPI.Services

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EventTicketAPI.Dtos;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Repositories;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using EventTicketAPI.Dtos.User;
 
 namespace EventTicketAPI.Services
 {

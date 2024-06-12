@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using EventTicketAPI.Dtos;
+using EventTicketAPI.Dtos.TicketSale;
+using EventTicketAPI.Dtos.TicketType;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Repositories;
 using Microsoft.Extensions.Caching.Distributed;

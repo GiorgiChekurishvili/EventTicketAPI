@@ -1,4 +1,5 @@
-﻿using EventTicketAPI.Dtos;
+﻿using EventTicketAPI.Dtos.Event;
+using EventTicketAPI.Dtos.Image;
 using EventTicketAPI.Entities;
 
 namespace EventTicketAPI.Services

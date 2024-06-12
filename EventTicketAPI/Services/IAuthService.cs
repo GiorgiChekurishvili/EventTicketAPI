@@ -1,4 +1,4 @@
-﻿using EventTicketAPI.Dtos;
+﻿using EventTicketAPI.Dtos.User;
 
 namespace EventTicketAPI.Services
 {
