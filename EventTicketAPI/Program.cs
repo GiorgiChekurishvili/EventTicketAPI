@@ -68,10 +68,12 @@ namespace EventTicketAPI
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IEventRepository, EventRepository>();
             builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
             
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEventService, EventService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
             
 
 
