@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EventTicketAPI.Filter;
-using EventTicketAPI.Dtos;
+using EventTicketAPI.Dtos.Event;
 
 namespace EventTicketAPI.Controllers
 {

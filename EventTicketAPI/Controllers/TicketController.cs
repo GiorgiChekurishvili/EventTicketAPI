@@ -1,10 +1,10 @@
-﻿using EventTicketAPI.Dtos;
-using EventTicketAPI.Entities;
+﻿using EventTicketAPI.Entities;
 using EventTicketAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EventTicketAPI.Filter;
+using EventTicketAPI.Dtos.TicketSale;
 
 
 namespace EventTicketAPI.Controllers
@@ -36,7 +36,7 @@ namespace EventTicketAPI.Controllers
             var boughtticket = await _ticketservice.BuyTicketService(buyTicket);
             if (Convert.ToInt32(boughtticket) == 0)
             {
-                return BadRequest("All the tickets in this section has already been sold");
+                return BadRequest("Error: Failed To Buy a Ticket");
             }
             
             return Ok("total price is: " + boughtticket + " lari");

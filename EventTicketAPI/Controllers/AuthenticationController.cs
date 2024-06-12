@@ -1,4 +1,4 @@
-﻿using EventTicketAPI.Dtos;
+﻿using EventTicketAPI.Dtos.User;
 using EventTicketAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

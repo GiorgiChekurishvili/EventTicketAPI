@@ -1,9 +1,9 @@
-﻿using EventTicketAPI.Dtos;
-using EventTicketAPI.Services;
+﻿using EventTicketAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EventTicketAPI.Filter;
 using EventTicketAPI.Entities;
+using EventTicketAPI.Dtos.Event;
 namespace EventTicketAPI.Controllers
 {
     [Route("api/[controller]")]
