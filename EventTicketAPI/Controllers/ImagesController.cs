@@ -23,8 +23,8 @@ namespace EventTicketAPI.Controllers
         }
         [Authorize]
         [RoleFilter("Admin")]
-        [HttpPost("UploadImage")]
-        public async Task<IActionResult> UploadImage([FromForm]FileManagement fileUpload, int eventId)
+        [HttpPost("UploadImage/{eventId}")]
+        public async Task<IActionResult> UploadImage(FileManagement fileUpload, int eventId)
         {
             if (fileUpload == null || fileUpload.files.Length == 0)
             {
@@ -47,6 +47,8 @@ namespace EventTicketAPI.Controllers
 
             return File(eventDto.Photo, eventDto.ImageType);
         }
+        [Authorize]
+        [RoleFilter("Admin")]
         [HttpDelete("DeleteImage/{eventId}")]
         public IActionResult DeleteImage(int eventId)
         {

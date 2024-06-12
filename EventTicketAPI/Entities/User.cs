@@ -20,5 +20,6 @@
 
         public ICollection<TicketSale> TicketSale  { get; set; }
         public ICollection<Favorite> Favorite { get; set; }
+        public ICollection<Transaction> Transaction { get; set; }
     }
 }

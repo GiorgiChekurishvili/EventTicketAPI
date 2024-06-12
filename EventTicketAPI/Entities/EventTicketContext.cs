@@ -18,6 +18,7 @@ namespace EventTicketAPI.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,7 +66,9 @@ namespace EventTicketAPI.Entities
             modelBuilder.Entity<Image>().HasKey(x => x.Id);
             modelBuilder.Entity<Image>().HasOne(x => x.Event).WithOne(x => x.Image).HasForeignKey<Image>(x => x.EventId);
             
-
+            modelBuilder.Entity<Transaction>().HasKey(x => x.Id);
+            modelBuilder.Entity<Transaction>().Property(x => x.TransactionMade).HasDefaultValueSql("SYSDATETIME()");
+            modelBuilder.Entity<Transaction>().HasOne(x => x.User).WithMany(x => x.Transaction).HasForeignKey(x => x.UserId);
 
         }
         public override int SaveChanges()
