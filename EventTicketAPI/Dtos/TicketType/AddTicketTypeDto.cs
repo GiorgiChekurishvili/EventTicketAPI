@@ -1,4 +1,4 @@
-﻿namespace EventTicketAPI.Dtos
+﻿namespace EventTicketAPI.Dtos.TicketType
 {
     public class AddTicketTypeDto
     {

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EventTicketAPI.Dtos
+namespace EventTicketAPI.Dtos.User
 {
     public class UserRegisterDto
     {
-        
+
         public required string Name { get; set; }
         public required string LastName { get; set; }
         [EmailAddress]

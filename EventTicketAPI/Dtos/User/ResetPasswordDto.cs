@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EventTicketAPI.Dtos
+namespace EventTicketAPI.Dtos.User
 {
     public class ResetPasswordDto
     {
         [Required]
-        public string Token {  get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
         [Required, Compare("Password")]
