@@ -1,5 +1,7 @@
 ﻿using EventTicketAPI.Dtos;
+using EventTicketAPI.Dtos.Transactions;
 using EventTicketAPI.Entities;
+using EventTicketAPI.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,11 +11,12 @@ namespace EventTicketAPI.Repositories
     public class TicketRepository : ITicketRepository
     {
         private readonly EventTicketContext _context;
-        public TicketRepository(EventTicketContext context)
+        private readonly ITransactionService _transactionService;
+        public TicketRepository(EventTicketContext context, ITransactionService transactionService)
         {
 
             _context = context;
-
+            _transactionService = transactionService;
         }
 
         public IEnumerable<TicketSale> GetTickets(int userid)
@@ -60,9 +63,26 @@ namespace EventTicketAPI.Repositories
                                         _context.TicketTypes.Update(tickettype);
                                         _context.SaveChanges();
                                     }
+                                    
                                     else
                                     {
                                         return 0;
+                                    }
+                                    var user = _context.Users.Where(x=>x.Id == ticketSale.UserId).FirstOrDefault();
+                                    if (user != null)
+                                    {
+                                        var eventname = _context.Events.FirstOrDefault(x => x.Id == ticketSale.EventId);
+                                        FillTransactionsDto transactionsDto = new FillTransactionsDto()
+                                        {
+                                            UserId = ticketSale.UserId,
+                                            Amount = _totalprice * -1,
+                                            Reason = $"Bought Tickets for {eventname.EventName}"
+                                        };
+                                        var buyTicketTransaction = _transactionService.MakeTransaction(transactionsDto);
+                                        if (buyTicketTransaction == null)
+                                        {
+                                            return 0;
+                                        }
                                     }
                                 }
                                 else
