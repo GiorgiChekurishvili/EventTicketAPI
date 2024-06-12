@@ -12,14 +12,14 @@
         public Role Role { get; set; }
         public DateTime DateRegistered { get; set; }
         public string? Verify { get; set; }
-
         public DateTime? VerifiedAt { get; set; }
         public string? PasswordChangeVerification {  get; set; }
         public DateTime? ExpiresPasswordChangeDate { get; set; }
+        public decimal Balance { get; set; }
         
 
         public ICollection<TicketSale> TicketSale  { get; set; }
         public ICollection<Favorite> Favorite { get; set; }
-        public ICollection<Transaction> Transaction { get; set; }
+        public ICollection<Transactions> Transaction { get; set; }
     }
 }
