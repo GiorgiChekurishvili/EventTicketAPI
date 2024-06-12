@@ -76,7 +76,7 @@ namespace EventTicketAPI.Repositories
                                         {
                                             UserId = ticketSale.UserId,
                                             Amount = _totalprice * -1,
-                                            Reason = $"Bought Tickets for {eventname.EventName}"
+                                            Reason = $"Bought Ticket Type: '{totalticketprice.TicketTypeName}', '{ticketSale.TicketQuantity}' Tickets, for '{eventname.EventName}'"
                                         };
                                         var buyTicketTransaction = _transactionService.MakeTransaction(transactionsDto);
                                         if (buyTicketTransaction == null)

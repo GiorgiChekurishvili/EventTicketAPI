@@ -7,6 +7,8 @@
         public User User { get; set; }
         public decimal Amount {  get; set; }
         public string Reason { get; set; }
+        public decimal BalanceChanges { get; set; }
         public DateTime TransactionMade { get; set; }
+
     }
 }

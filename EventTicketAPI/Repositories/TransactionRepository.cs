@@ -45,6 +45,8 @@ namespace EventTicketAPI.Repositories
                 {
                     return null;
                 }
+                
+                transaction.BalanceChanges = user.Balance + transaction.BalanceChanges;
                 _context.Users.Update(user);
                 _context.SaveChanges();
                 _context.Transactions.Add(transaction);
