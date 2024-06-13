@@ -5,6 +5,8 @@ namespace EventTicketAPI.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
+        
+
         private readonly EventTicketContext _context;
         public TransactionRepository(EventTicketContext context)
         {
