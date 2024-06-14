@@ -5,8 +5,10 @@ namespace EventTicketAPI.Services
 {
     public interface ITransactionService
     {
-        FillTransactionsDto MakeTransaction(FillTransactionsDto transaction);
-        decimal CheckBalance(int userId);
-        IEnumerable<TransactionsReturnDto> ShowMyTransactions(int userid);
+        Task<FillTransactionsDto> MakeTransaction(FillTransactionsDto transaction);
+        Task<decimal> CheckBalanceAsync(int userId);
+        Task<IEnumerable<TransactionsReturnDto>> ShowMyTransactions(int userid);
+        Task ResetBalanceCache(int userid);
+        Task ResetTransactionsCache(int userid);
     }
 }

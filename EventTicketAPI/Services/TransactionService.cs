@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using EventTicketAPI.Dtos.TicketSale;
 using EventTicketAPI.Dtos.Transactions;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Repositories;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EventTicketAPI.Services
 {
@@ -9,30 +13,76 @@ namespace EventTicketAPI.Services
     {
         private readonly ITransactionRepository _transactionRepository;
         private readonly IMapper _mapper;
-        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper)
+        private readonly IDistributedCache _cache;
+        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper, IDistributedCache cache)
         {
             _transactionRepository = transactionRepository;
             _mapper = mapper;
+            _cache = cache;
         }
-        public decimal CheckBalance(int userId)
+        public async Task<decimal> CheckBalanceAsync(int userId)
         {
             decimal balance = _transactionRepository.CheckMyBalance(userId);
-            return balance;
+            if (balance == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                var cachekey = $"CheckBalance-{userId}";
+                var cachedata = await _cache.GetStringAsync(cachekey);
+                if (!string.IsNullOrEmpty(cachedata))
+                {
+                    return JsonConvert.DeserializeObject<decimal>(cachedata);
+                }
+                var cacheoptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(3)).SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                await _cache.SetStringAsync(cachekey, JsonConvert.SerializeObject(balance), cacheoptions);
+                return balance;
+            }
+
         }
 
-        public FillTransactionsDto MakeTransaction(FillTransactionsDto transaction)
+        public async  Task<FillTransactionsDto> MakeTransaction(FillTransactionsDto transaction)
         {
             var map = _mapper.Map<Transactions>(transaction);
             var result = _transactionRepository.MakeTransaction(map);
-            
+            ResetTransactionsCache(transaction.UserId);
+            ResetBalanceCache(transaction.UserId);
             return _mapper.Map<FillTransactionsDto>(result);
         }
 
-        public IEnumerable<TransactionsReturnDto> ShowMyTransactions(int userid)
+        public async Task<IEnumerable<TransactionsReturnDto>> ShowMyTransactions(int userid)
         {
             var data = _transactionRepository.ViewMyTransactions(userid);
-            var map = _mapper.Map<IEnumerable<TransactionsReturnDto>>(data);
-            return map;
+            if (data == null)
+            {
+                return null;
+            }
+            else
+            {
+                var cachekey = $"ShowMyTransaction-{userid}";
+                var cachedata = await _cache.GetStringAsync(cachekey);
+                if (!string.IsNullOrEmpty(cachedata))
+                {
+                    return JsonConvert.DeserializeObject<IEnumerable<TransactionsReturnDto>>(cachedata);
+                }
+
+                var map = _mapper.Map<IEnumerable<TransactionsReturnDto>>(data);
+                var cacheoptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(3)).SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                await _cache.SetStringAsync(cachekey, JsonConvert.SerializeObject(map), cacheoptions);
+
+                return map;
+            }
+        }
+        public async Task ResetBalanceCache(int userid)
+        {
+            var cachekey = $"CheckBalance-{userid}";
+            await _cache.RemoveAsync(cachekey);
+        }
+        public async Task ResetTransactionsCache(int userid)
+        {
+            var cachekey = $"ShowMyTransaction-{userid}";
+            await _cache.RemoveAsync(cachekey);
         }
     }
 }

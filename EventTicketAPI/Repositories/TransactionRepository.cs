@@ -1,4 +1,8 @@
 ﻿using EventTicketAPI.Entities;
+using MailKit.Security;
+using MimeKit.Text;
+using MimeKit;
+using System.Security.Cryptography;
 using System.Transactions;
 
 namespace EventTicketAPI.Repositories
@@ -73,5 +77,6 @@ namespace EventTicketAPI.Repositories
             return null;
 
         }
+        
     }
 }

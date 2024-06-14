@@ -22,7 +22,7 @@ namespace EventTicketAPI.Controllers
         [Authorize]
         [RoleFilter("member")]
         [HttpPost("maketransaction/{amount}")]
-        public IActionResult MakeTransaction(decimal amount)
+        public async Task<IActionResult> MakeTransaction(decimal amount)
         {
             var user = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             FillTransactionsDto fillTransactionsDto = new FillTransactionsDto()
@@ -31,7 +31,7 @@ namespace EventTicketAPI.Controllers
                 Amount = amount,
                 Reason = "Added Cash To Balance"
             };
-            var transaction = _transactionService.MakeTransaction(fillTransactionsDto);
+            var transaction = await _transactionService.MakeTransaction(fillTransactionsDto);
             if (transaction == null)
             {
                 return BadRequest();
@@ -42,20 +42,20 @@ namespace EventTicketAPI.Controllers
         [Authorize]
         [RoleFilter("member")]
         [HttpGet("viewmybalance")]
-        public ActionResult<int> ViewMyBalance()
+        public async Task<ActionResult<int>> ViewMyBalance()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var balance = _transactionService.CheckBalance(userId);
+            var balance = await _transactionService.CheckBalanceAsync(userId);
             return Ok(balance);
         }
         
         [Authorize]
         [RoleFilter("member")]
         [HttpGet("viewmytransactions")]
-        public ActionResult<IEnumerable<TransactionsReturnDto>> ViewMyTransactions()
+        public async Task<ActionResult<IEnumerable<TransactionsReturnDto>>> ViewMyTransactions()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var transactions = _transactionService.ShowMyTransactions(userId);
+            var transactions = await _transactionService.ShowMyTransactions(userId);
             if (transactions == null)
             {
                 return BadRequest();
