@@ -149,7 +149,7 @@ namespace EventTicketAPI.Repositories
         }
         public string CreateRandomToken()
         {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
         }
     }
     

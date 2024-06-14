@@ -5,7 +5,7 @@ namespace EventTicketAPI.Repositories
 {
     public interface ITicketRepository
     {
-        decimal AddTicket(TicketSale ticketSale);
+        Task<decimal> AddTicket(TicketSale ticketSale);
         void DeleteTicket(int eventId, int userId);
         IEnumerable<TicketSale> GetTickets(int userId);
         int InsertTicketType(TicketType ticketType);

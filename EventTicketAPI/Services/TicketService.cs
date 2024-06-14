@@ -44,7 +44,7 @@ namespace EventTicketAPI.Services
         public async Task<decimal> BuyTicketService(BuyTicketDto buyTicket)
         {
             var ticket = _mapper.Map<TicketSale>(buyTicket);
-            var _totalprice = _ticketRepository.AddTicket(ticket);
+            var _totalprice = await _ticketRepository.AddTicket(ticket);
             await ResetTicketsCache(buyTicket.UserId);
             await ResetTicketTypeCache(buyTicket.EventId);
             return _totalprice;

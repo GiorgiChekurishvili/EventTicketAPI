@@ -2,9 +2,14 @@
 using EventTicketAPI.Dtos.Transactions;
 using EventTicketAPI.Entities;
 using EventTicketAPI.Services;
+using MailKit.Security;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MimeKit.Text;
+using MimeKit;
+using System.Security.Cryptography;
+using MailKit.Net.Smtp;
 
 namespace EventTicketAPI.Repositories
 {
@@ -12,11 +17,13 @@ namespace EventTicketAPI.Repositories
     {
         private readonly EventTicketContext _context;
         private readonly ITransactionService _transactionService;
-        public TicketRepository(EventTicketContext context, ITransactionService transactionService)
+        private readonly IConfiguration _config;
+        public TicketRepository(EventTicketContext context, ITransactionService transactionService, IConfiguration config)
         {
 
             _context = context;
             _transactionService = transactionService;
+            _config = config;
         }
 
         public IEnumerable<TicketSale> GetTickets(int userid)
@@ -26,7 +33,7 @@ namespace EventTicketAPI.Repositories
             return data;
             
         }
-        public decimal AddTicket(TicketSale ticketSale)
+        public async Task<decimal> AddTicket(TicketSale ticketSale)
         {
             if (ticketSale != null)
             {
@@ -78,7 +85,11 @@ namespace EventTicketAPI.Repositories
                                             Amount = _totalprice * -1,
                                             Reason = $"Bought Ticket Type: '{totalticketprice.TicketTypeName}', '{ticketSale.TicketQuantity}' Tickets, for '{eventname.EventName}'"
                                         };
-                                        var buyTicketTransaction = _transactionService.MakeTransaction(transactionsDto);
+                                        var buyTicketTransaction = await _transactionService.MakeTransaction(transactionsDto);
+                                        await _transactionService.ResetTransactionsCache(ticketSale.UserId);
+                                        await _transactionService.ResetBalanceCache(ticketSale.UserId);
+                                        var token = CreateRandomToken();
+                                        SendEmail(ticketSale, token);
                                         if (buyTicketTransaction == null)
                                         {
                                             return 0;
@@ -250,7 +261,47 @@ namespace EventTicketAPI.Repositories
             var data = _context.TicketTypes.Where(x => x.EventId == eventId).ToList();
             return data;
         }
+        public void SendEmail(TicketSale ticketSale, string token)
+        {
+            var email = _context.Users.FirstOrDefault(x => x.Id == ticketSale.UserId);
+            var mail = new MimeMessage();
+            mail.From.Add(MailboxAddress.Parse(_config.GetSection("EmailSender").Value));
+            mail.To.Add(MailboxAddress.Parse(email!.Email));
+            mail.Subject = "Ticket";
+            string eventName = "Concert";
+            int quantity = 2;
+            decimal pricePerTicket = 50.00m;
+            decimal totalPrice = quantity * pricePerTicket;
 
-        
+            string bodyText = $@"
+                Dear Customer,
+
+                Thank you for your purchase!
+
+                Here are your ticket details:
+
+                Ticket ID: {token}
+                Event: {eventName}
+                Quantity: {quantity}
+                Price per Ticket: ${pricePerTicket:F2}
+                Total Price: ${totalPrice:F2}
+
+                We hope you enjoy the event!
+            ";
+            mail.Body = new TextPart(TextFormat.Plain) { Text = bodyText, };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_config.GetSection("EmailSender").Value, _config.GetSection("EmailPassword").Value);
+            smtp.Send(mail);
+            smtp.Disconnect(true);
+
+        }
+        public string CreateRandomToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(8));
+        }
+
+
     }
 }
