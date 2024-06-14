@@ -52,16 +52,14 @@ namespace EventTicketAPI.Repositories
                     return;
                 }
 
-                var ifexists = _context.Events.FirstOrDefault(x => x.EventName.ToLower() == _event.EventName.ToLower());
-                if (ifexists == null)
-                {
-                    if (_event.Capacity != 0)
-                    {
-                        _context.Events.Entry(_event).State = EntityState.Modified;
-                        _context.SaveChanges();
 
-                    }
+                if (_event.Capacity != 0)
+                {
+                    _context.Events.Entry(_event).State = EntityState.Modified;
+                    _context.SaveChanges();
+
                 }
+
             }
         }
         public int DeleteEvent(int id)

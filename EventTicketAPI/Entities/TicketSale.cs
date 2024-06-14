@@ -6,6 +6,7 @@ namespace EventTicketAPI.Entities
     public class TicketSale : IsDeletable
     {
         public int Id { get; set; }
+        public string GeneratedTicketId { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
         public int EventId { get; set; }

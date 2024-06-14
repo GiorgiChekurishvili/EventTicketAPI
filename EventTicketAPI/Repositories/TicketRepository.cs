@@ -28,9 +28,13 @@ namespace EventTicketAPI.Repositories
 
         public IEnumerable<TicketSale> GetTickets(int userid)
         {
-            
-            var data = _context.TicketSales.Include(t => t.Event).Include(t => t.TicketType).ToList();
-            return data;
+
+            var finisheddata = _context.TicketSales
+                               .Include(t => t.Event)
+                               .Include(t => t.TicketType)
+                               .Where(x => x.UserId == userid)
+                               .ToList();
+            return finisheddata;
             
         }
         public async Task<decimal> AddTicket(TicketSale ticketSale)
@@ -49,14 +53,16 @@ namespace EventTicketAPI.Repositories
                         if (totalticketprice != null)
                         {
                             var _totalprice = ticketSale.TicketQuantity * totalticketprice.Price;
-
+                            var token = CreateRandomToken();
                             TicketSale ticket = new TicketSale()
                             {
                                 UserId = ticketSale.UserId,
                                 EventId = ticketSale.EventId,
                                 TicketTypeId = ticketSale.TicketTypeId,
                                 TotalPrice = _totalprice,
-                                TicketQuantity = ticketSale.TicketQuantity
+                                TicketQuantity = ticketSale.TicketQuantity,
+                                GeneratedTicketId = token
+                               
                             };
                             var tickettype = _context.TicketTypes.FirstOrDefault(x => x.Id == ticketSale.TicketTypeId);
                             if (tickettype != null)
@@ -88,7 +94,7 @@ namespace EventTicketAPI.Repositories
                                         var buyTicketTransaction = await _transactionService.MakeTransaction(transactionsDto);
                                         await _transactionService.ResetTransactionsCache(ticketSale.UserId);
                                         await _transactionService.ResetBalanceCache(ticketSale.UserId);
-                                        var token = CreateRandomToken();
+                                        
                                         SendEmail(ticketSale, token);
                                         if (buyTicketTransaction == null)
                                         {
