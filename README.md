@@ -1,6 +1,6 @@
 # EventTicketAPI
 
-EventTicketAPI is a web API for managing event tickets, including browsing events, purchasing tickets, and favoriting events. This project uses ASP.NET Core with Entity Framework Core, JWT Bearer Authentication, and Redis caching.
+EventTicketAPI is a web API for managing event tickets, including browsing events, purchasing tickets, and favoriting events. This project uses ASP.NET Core with Entity Framework Core, JWT Bearer Authentication, Redis caching and SMTP Client for Email Sending.
 
 ## Features
 
@@ -19,6 +19,7 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 - **SQL Server**
 - **AutoMapper**
 - **Swagger**
+- **MailKit**
 
 ## Getting Started
 
