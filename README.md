@@ -113,7 +113,4 @@ Feel free to contribute by opening pull requests or issues. Your contributions a
 ## Security
 JWT authentication is used for securing the endpoints.
 Different user roles like Admin and Member are managed.
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
