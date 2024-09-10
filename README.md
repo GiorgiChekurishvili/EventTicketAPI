@@ -6,7 +6,7 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 
 - **Event Management**: Add, update, delete, and browse events.
 - **Ticket Management**: Purchase and manage event tickets.
-- **User Authentication**: JWT-based registration and login.
+- **User Authentication**: JWT-based registration and login, verification using smtp client to send emails to verity user authentication.
 - **Favoriting Events**: Mark events as favorites for quick access.
 - **Caching**: Uses Redis for caching frequently accessed data.
 
