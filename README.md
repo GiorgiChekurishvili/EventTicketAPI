@@ -17,6 +17,8 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 - **JWT Bearer Authentication**
 - **Redis**: For caching.
 - **SQL Server**
+- **AutoMapper**
+- **Swagger**
 
 ## Getting Started
 
