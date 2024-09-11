@@ -10,6 +10,7 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 - **Favoriting Events**: Mark events as favorites for quick access.
 - **Caching**: Uses Redis for caching frequently accessed data.
 - **MailSending**: Uses SMTP client and Mailkit library for EmailSending bought ticket information and verification token to verify the latest registered user
+- **ImageUpload/Retrieve**: uses byte to upload image for different events and retrieve them.
 
 ## Technologies Used
 
@@ -80,8 +81,11 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 
 ### Authentication
 
-- **POST** `/api/auth/register`: Register a new user.
-- **POST** `/api/auth/login`: Log in with JWT authentication.
+- **POST** `/api/Authentication/register`: Register a new user.
+- **POST** `/api/Authentication/login`: Log in with JWT authentication.
+- **POST** `/api/Authentication/verify/{token}`: Verify user based on token send to their registered email.
+- **POST** `/api/Authentication/forgetpassword/{email}`: Send token to email to verify if user wants to change password.
+- **POST** `/api/Authentication/changepassword`: Change password using the token was sent from forgetpassword request
 
 ### Events
 
