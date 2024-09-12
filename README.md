@@ -81,52 +81,52 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 
 ### Authentication
 
-- **POST** `/api/Authentication/register`: Register a new user.
-- **POST** `/api/Authentication/login`: Log in with JWT authentication.
-- **POST** `/api/Authentication/verify/{token}`: Verify user based on token send to their registered email.
-- **POST** `/api/Authentication/forgetpassword/{email}`: Send token to email to verify if user wants to change password.
-- **POST** `/api/Authentication/changepassword`: Change password using the token was sent from forgetpassword request
+- **POST** `/api/authentication/register`: Register a new user.
+- **POST** `/api/authentication/login`: Log in with JWT authentication.
+- **POST** `/api/authentication/verify/{token}`: Verify user based on token send to their registered email.
+- **POST** `/api/authentication/forgetpassword/{email}`: Send token to email to verify if user wants to change password.
+- **POST** `/api/authentication/changepassword`: Change password using the token was sent from forgetpassword request
 
 ### Events
 
-- **GET** `/api/Event/events`: Retrieve a list of events.
-- **GET** `/api/Event/eventsbyid/{id}`: Retrieve event details by ID.
-- **POST** `/api/Event/publishevent`: Create a new event.
-- **PUT** `/api/Event/updatevent/{id}`: Update an event by ID.
-- **DELETE** `/api/Event/deleteevent/{id}`: Delete an event by ID.
-- **GET** `/api/Event/eventcategories`: Retrieve a list of event categories.
-- **GET** `/api/Event/eventsbycategory/{categoryid}`: Retrieve events details by categories.
+- **GET** `/api/event/events`: Retrieve a list of events.
+- **GET** `/api/event/eventsbyid/{id}`: Retrieve event details by ID.
+- **POST** `/api/event/publishevent`: Create a new event (Admin only).
+- **PUT** `/api/event/updatevent/{id}`: Update an event by ID (Admin only).
+- **DELETE** `/api/event/deleteevent/{id}`: Delete an event by ID (Admin only).
+- **GET** `/api/event/eventcategories`: Retrieve a list of event categories.
+- **GET** `/api/event/eventsbycategory/{categoryid}`: Retrieve events details by categories.
 
 ### Tickets
 
-- **POST** `/api/Ticket/buyticket/{Eventid}/{TicketTypeId}/{TicketQuantity}`: Purchase a ticket for an event.
-- **GET** `/api/tickets/viewmytickets`: Get all tickets for a specific user.
-- **DELETE** `/api/Ticket/refundticket/{ticketId}`: Cancel a ticket purchase.
+- **POST** `/api/ticket/buyticket/{Eventid}/{TicketTypeId}/{TicketQuantity}`: Purchase a ticket for an event (User member only).
+- **GET** `/api/ticket/viewmytickets`: Get all tickets for a specific user (User member only).
+- **DELETE** `/api/ticket/refundticket/{ticketId}`: Cancel a ticket purchase (User member only).
 - 
 ### TicketType
 
-- **GET** `/api/TicketType/seetickettypes/{eventId}`: view what tickets are available on a event.
-- **POST** `/api/TicketType/addtickettype`: Create a new ticket type.
-- **PUT** `/api/TicketType/changetickettype/{tickettypeId}`: Update a ticket.
-- **DELETE** `/api/TicketType/removetickettype{TicketTypeId}/{EventId}`: Delete a ticket type by ID and eventId.
+- **GET** `/api/ticketType/seetickettypes/{eventId}`: view what tickets are available on a event (User member only).
+- **POST** `/api/ticketType/addtickettype`: Create a new ticket type (Admin only).
+- **PUT** `/api/ticketType/changetickettype/{tickettypeId}`: Update a ticket (Admin only).
+- **DELETE** `/api/ticketType/removetickettype{TicketTypeId}/{EventId}`: Delete a ticket type by ID and eventId (Admin only).
 
 ### Favorites
 
-- **POST** `/api/Favorite/favoriteevent/{eventId}`: Add an event to favorites.
-- **DELETE** `/api/Favorite/unfavoriteevent/{eventId}`: Remove an event from favorites.
-- **GET** `/api/Favorite/viewmyfavorites/`: Get all favorited events for a user.
+- **POST** `/api/favorite/favoriteevent/{eventId}`: Add an event to favorites (User member only).
+- **DELETE** `/api/favorite/unfavoriteevent/{eventId}`: Remove an event from favorites (User member only).
+- **GET** `/api/favorite/viewmyfavorites/`: Get all favorited events for a user (User member only).
  
  ### Images
 
-- **POST** `/api/Images/UploadImage/{eventId}`: Upload an image for an event.
-- **GET** `/api/Images/RetrieveImage/{eventId}`: RetrieveImage for a specific event.
-- **DELETE** `/api/Images/DeleteImage/{eventId}`: Delete an image.
+- **POST** `/api/images/UploadImage/{eventId}`: Upload an image for an event (Admin only).
+- **GET** `/api/images/RetrieveImage/{eventId}`: RetrieveImage for a specific event.
+- **DELETE** `/api/images/DeleteImage/{eventId}`: Delete an image (Admin only).
 
 ### Transaction
 
-- **POST** `/api/Transaction/maketransaction/{amount}`: Fill a balance.
-- **GET** `/api/Transaction/{viewmybalance}`: View a balance.
-- **GET** `/api/Transaction/viewmytransactions`: View transactions made by users for example buying tickets or filling a balance.
+- **POST** `/api/transaction/maketransaction/{amount}`: Fill a balance (User member only).
+- **GET** `/api/transaction/{viewmybalance}`: View a balance (User member only).
+- **GET** `/api/transaction/viewmytransactions`: View transactions made by users for example buying tickets or filling a balance (User member only).
 
 
 ## Caching
