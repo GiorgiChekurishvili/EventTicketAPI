@@ -115,14 +115,14 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 - **POST** `/api/Favorite/favoriteevent/{eventId}`: Add an event to favorites.
 - **DELETE** `/api/Favorite/unfavoriteevent/{eventId}`: Remove an event from favorites.
 - **GET** `/api/Favorite/viewmyfavorites/`: Get all favorited events for a user.
-- 
-- ### Images
+ 
+ ### Images
 
 - **POST** `/api/Images/UploadImage/{eventId}`: Upload an image for an event.
 - **GET** `/api/Images/RetrieveImage/{eventId}`: RetrieveImage for a specific event.
 - **DELETE** `/api/Images/DeleteImage/{eventId}`: Delete an image.
 
-- - ### Transaction
+### Transaction
 
 - **POST** `/api/Transaction/maketransaction/{amount}`: Fill a balance.
 - **GET** `/api/Transaction/{viewmybalance}`: View a balance.
