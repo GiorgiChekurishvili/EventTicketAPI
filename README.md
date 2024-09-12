@@ -89,23 +89,45 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 
 ### Events
 
-- **GET** `/api/events`: Retrieve a list of events.
-- **GET** `/api/events/{id}`: Retrieve event details by ID.
-- **POST** `/api/events`: Create a new event.
-- **PUT** `/api/events/{id}`: Update an event by ID.
-- **DELETE** `/api/events/{id}`: Delete an event by ID.
+- **GET** `/api/Event/events`: Retrieve a list of events.
+- **GET** `/api/Event/eventsbyid/{id}`: Retrieve event details by ID.
+- **POST** `/api/Event/publishevent`: Create a new event.
+- **PUT** `/api/Event/updatevent/{id}`: Update an event by ID.
+- **DELETE** `/api/Event/deleteevent/{id}`: Delete an event by ID.
+- **GET** `/api/Event/eventcategories`: Retrieve a list of event categories.
+- **GET** `/api/Event/eventsbycategory/{categoryid}`: Retrieve events details by categories.
 
 ### Tickets
 
-- **POST** `/api/tickets/purchase`: Purchase a ticket for an event.
-- **GET** `/api/tickets/user/{userId}`: Get all tickets for a specific user.
-- **DELETE** `/api/tickets/{ticketId}`: Cancel a ticket purchase.
+- **POST** `/api/Ticket/buyticket/{Eventid}/{TicketTypeId}/{TicketQuantity}`: Purchase a ticket for an event.
+- **GET** `/api/tickets/viewmytickets`: Get all tickets for a specific user.
+- **DELETE** `/api/Ticket/refundticket/{ticketId}`: Cancel a ticket purchase.
+- 
+### TicketType
+
+- **GET** `/api/TicketType/seetickettypes/{eventId}`: view what tickets are available on a event.
+- **POST** `/api/TicketType/addtickettype`: Create a new ticket type.
+- **PUT** `/api/TicketType/changetickettype/{tickettypeId}`: Update a ticket.
+- **DELETE** `/api/TicketType/removetickettype{TicketTypeId}/{EventId}`: Delete a ticket type by ID and eventId.
 
 ### Favorites
 
-- **POST** `/api/favorites/{eventId}`: Add an event to favorites.
-- **DELETE** `/api/favorites/{eventId}`: Remove an event from favorites.
-- **GET** `/api/favorites/user/{userId}`: Get all favorited events for a user.
+- **POST** `/api/Favorite/favoriteevent/{eventId}`: Add an event to favorites.
+- **DELETE** `/api/Favorite/unfavoriteevent/{eventId}`: Remove an event from favorites.
+- **GET** `/api/Favorite/viewmyfavorites/`: Get all favorited events for a user.
+- 
+- ### Images
+
+- **POST** `/api/Images/UploadImage/{eventId}`: Upload an image for an event.
+- **GET** `/api/Images/RetrieveImage/{eventId}`: RetrieveImage for a specific event.
+- **DELETE** `/api/Images/DeleteImage/{eventId}`: Delete an image.
+
+- - ### Transaction
+
+- **POST** `/api/Transaction/maketransaction/{amount}`: Fill a balance.
+- **GET** `/api/Transaction/{viewmybalance}`: View a balance.
+- **GET** `/api/Transaction/viewmytransactions`: View transactions made by users for example buying tickets or filling a balance.
+
 
 ## Caching
 
