@@ -102,7 +102,7 @@ EventTicketAPI is a web API for managing event tickets, including browsing event
 - **POST** `/api/ticket/buyticket/{Eventid}/{TicketTypeId}/{TicketQuantity}`: Purchase a ticket for an event (User member only).
 - **GET** `/api/ticket/viewmytickets`: Get all tickets for a specific user (User member only).
 - **DELETE** `/api/ticket/refundticket/{ticketId}`: Cancel a ticket purchase (User member only).
-- 
+  
 ### TicketType
 
 - **GET** `/api/ticketType/seetickettypes/{eventId}`: view what tickets are available on a event (User member only).
