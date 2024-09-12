@@ -34,7 +34,7 @@ namespace EventTicketAPI.Controllers
         }
         [Authorize]
         [RoleFilter("Admin")]
-        [HttpPut("changeeventtype/{ticketTypeId}")]
+        [HttpPut("changetickettype/{ticketTypeId}")]
         public async Task<IActionResult> ChangeTicketType(int ticketTypeId, AddTicketTypeDto ticketType)
         {
             await _ticketService.UpdateTicketType(ticketTypeId, ticketType);
